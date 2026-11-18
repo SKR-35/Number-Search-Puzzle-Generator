@@ -1,0 +1,19 @@
+[project]
+name = "number-search-generator"
+version = "0.1.0"
+description = "Deterministic number search puzzle generator"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+number-search = "number_search_generator.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.9"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
