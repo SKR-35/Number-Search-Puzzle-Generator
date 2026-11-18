@@ -20,7 +20,7 @@ def test_file_and_leading_zero(tmp_path):
     topic = make_topic(seed=7)
     numbers = ("01234567", *topic.words[1:])
     file = tmp_path / "numbers.txt"
-    file.write_text("topic: Zero\n" + "\n".join(numbers))
+    file.write_text("\n".join(numbers))
     parsed = parse_input(file)[0]
     assert parsed.words[0] == "01234567"
 
@@ -37,7 +37,7 @@ def test_auto_and_quality():
 
 def test_reject_invalid(tmp_path):
     file = tmp_path / "invalid.txt"
-    file.write_text("topic: Invalid\n12345\n")
+    file.write_text("12345\n")
     with pytest.raises(ValueError, match="6-10"):
         parse_input(file)
     with pytest.raises(ValueError):
@@ -46,9 +46,9 @@ def test_reject_invalid(tmp_path):
 
 def test_default_auto_length_is_eight():
     topic = make_topic(seed=42)
-    assert len(topic.words) == 15
+    assert len(topic.words) == 20
     assert all(len(number) == 8 for number in topic.words)
-    assert len(set(topic.words)) == 15
+    assert len(set(topic.words)) == 20
 
 
 @pytest.mark.parametrize("length", range(6, 11))

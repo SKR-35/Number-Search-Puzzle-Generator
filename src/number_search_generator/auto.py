@@ -8,7 +8,7 @@ from .parser import Topic
 def make_topic(
     *,
     name: str = "Number Search",
-    count: int = 15,
+    count: int = 20,
     min_length: int = 8,
     max_length: int = 8,
     seed: int = 42,

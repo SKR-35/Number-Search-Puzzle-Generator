@@ -12,10 +12,10 @@ from .pdf_export import export_pdfs
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate number search puzzles")
     source = parser.add_mutually_exclusive_group(required=True)
-    source.add_argument("input", nargs="?", help="Topic file")
+    source.add_argument("input", nargs="?", help="Blank-line-separated number groups")
     source.add_argument("--auto", action="store_true", help="Generate target sequences")
     parser.add_argument("--size", type=int, choices=(15, 20), default=20)
-    parser.add_argument("--count", type=int, choices=(15, 20), default=15)
+    parser.add_argument("--count", type=int, choices=(15, 20), default=20)
     parser.add_argument(
         "--length",
         type=int,
