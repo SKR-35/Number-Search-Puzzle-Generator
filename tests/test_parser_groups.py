@@ -29,10 +29,43 @@ def test_reject_duplicate_group(tmp_path):
         parse_input(file)
 
 
-def test_reject_legacy_topic_header(tmp_path):
+def test_optional_topic_and_untitled_groups(tmp_path):
+    a = [f"{i:06d}" for i in range(20)]
+    b = [f"{i + 100:08d}" for i in range(20)]
+    c = [f"{i + 200:08d}" for i in range(20)]
     file = tmp_path / "numbers.txt"
-    file.write_text("topic: Old format\n")
-    with pytest.raises(ValueError, match="Invalid"):
+    file.write_text(
+        "topic: History of Philosophy\n\n"
+        + "\n".join(a)
+        + "\n\n"
+        + "\n".join(b)
+        + "\n\nTOPIC: Historical Dates\n"
+        + "\n".join(c),
+        encoding="utf-8",
+    )
+    topics = parse_input(file)
+    assert [t.name for t in topics] == [
+        "History of Philosophy",
+        "Number Search 002",
+        "Historical Dates",
+    ]
+    assert topics[0].words == tuple(a)
+
+
+def test_reject_empty_or_orphan_topic(tmp_path):
+    file = tmp_path / "numbers.txt"
+    file.write_text("topic:  \n")
+    with pytest.raises(ValueError, match="Empty topic"):
+        parse_input(file)
+    file.write_text("topic: Orphan\n")
+    with pytest.raises(ValueError, match="no number group"):
+        parse_input(file)
+
+
+def test_reject_topic_in_middle_of_group(tmp_path):
+    file = tmp_path / "numbers.txt"
+    file.write_text("12345678\ntopic: Wrong place\n")
+    with pytest.raises(ValueError, match="must precede"):
         parse_input(file)
 
 
