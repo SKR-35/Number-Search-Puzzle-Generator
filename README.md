@@ -65,6 +65,27 @@ Create a UTF-8 text file containing **one digit sequence per line**. Separate pu
 Example with **15 targets per group** (run with `--count 15`):
 
 ```text
+261811
+039316
+220512
+122502
+470815
+260626
+630513
+530531
+220324
+142406
+733934
+315542
+343548
+011727
+182704
+091914
+140415
+081404
+260254
+041227
+
 58392017
 72418390
 61928473
