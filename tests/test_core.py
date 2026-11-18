@@ -42,3 +42,16 @@ def test_reject_invalid(tmp_path):
         parse_input(file)
     with pytest.raises(ValueError):
         make_topic(min_length=11)
+
+
+def test_default_auto_length_is_eight():
+    topic = make_topic(seed=42)
+    assert len(topic.words) == 15
+    assert all(len(number) == 8 for number in topic.words)
+    assert len(set(topic.words)) == 15
+
+
+@pytest.mark.parametrize("length", range(6, 11))
+def test_fixed_auto_length(length):
+    topic = make_topic(min_length=length, max_length=length, seed=42)
+    assert all(len(number) == length for number in topic.words)

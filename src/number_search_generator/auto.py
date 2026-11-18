@@ -9,8 +9,8 @@ def make_topic(
     *,
     name: str = "Number Search",
     count: int = 15,
-    min_length: int = 6,
-    max_length: int = 10,
+    min_length: int = 8,
+    max_length: int = 8,
     seed: int = 42,
 ) -> Topic:
     if count not in (15, 20) or not 6 <= min_length <= max_length <= 10:

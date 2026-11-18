@@ -16,8 +16,18 @@ def main() -> None:
     source.add_argument("--auto", action="store_true", help="Generate target sequences")
     parser.add_argument("--size", type=int, choices=(15, 20), default=20)
     parser.add_argument("--count", type=int, choices=(15, 20), default=15)
-    parser.add_argument("--min-length", type=int, default=6)
-    parser.add_argument("--max-length", type=int, default=10)
+    parser.add_argument(
+        "--length",
+        type=int,
+        default=None,
+        help="Fixed auto sequence length (6-10; default 8)",
+    )
+    parser.add_argument(
+        "--min-length", type=int, default=None, help="Legacy auto range minimum"
+    )
+    parser.add_argument(
+        "--max-length", type=int, default=None, help="Legacy auto range maximum"
+    )
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--min-quality", type=float, default=80)
     parser.add_argument("--candidates", type=int, default=100)
@@ -26,14 +36,25 @@ def main() -> None:
     args = parser.parse_args()
     if args.pdf_dir and not args.db:
         parser.error("--pdf-dir requires --db")
-    if not 6 <= args.min_length <= args.max_length <= 10:
+    if args.length is not None and (
+        args.min_length is not None or args.max_length is not None
+    ):
+        parser.error("--length cannot be combined with --min-length or --max-length")
+    if args.length is not None:
+        min_length = max_length = args.length
+    elif args.min_length is not None or args.max_length is not None:
+        min_length = args.min_length if args.min_length is not None else 6
+        max_length = args.max_length if args.max_length is not None else 10
+    else:
+        min_length = max_length = 8
+    if not 6 <= min_length <= max_length <= 10:
         parser.error("Lengths must satisfy 6 <= min-length <= max-length <= 10")
     topics = (
         [
             make_topic(
                 count=args.count,
-                min_length=args.min_length,
-                max_length=args.max_length,
+                min_length=min_length,
+                max_length=max_length,
                 seed=args.seed,
             )
         ]
