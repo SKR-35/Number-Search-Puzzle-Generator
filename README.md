@@ -18,3 +18,25 @@ Inputs use `topic:` blocks followed by exactly 15 or 20 distinct ASCII digit seq
 Quality measures spatial entropy (35%), direction diversity (25%), region coverage (20%), intersection quality (10%), and placement balance (10%). Difficulty is a separate heuristic incorporating reverse/diagonal placement, length, intersections, and shared contiguous digit runs. Scores are not validated measures of solving time.
 
 **Phase 1 limitations:** terminal preview only; SQLite and PDF export are planned for Phase 2. No claim of print readiness.
+
+## Phase 2: SQLite and PDF
+
+Install dependencies with `uv sync`. To persist and export a 20×20 automatic puzzle:
+
+```powershell
+uv run number-search --auto --size 20 --count 15 --seed 42 --candidates 30 --db data/puzzles.db --pdf-dir output
+```
+
+Or use input topics:
+
+```powershell
+uv run number-search examples/input.txt --size 15 --count 15 --seed 42 --candidates 30 --db data/puzzles.db --pdf-dir output
+```
+
+PDFs are `output/number-search-puzzles.pdf` and `output/number-search-solutions.pdf`. Existing identical puzzles are reused in SQLite. PDF output represents the successful puzzles from the current run, including reused records. Exporting again to the same directory overwrites the two PDFs.
+
+```powershell
+uv run pytest -q
+uv run ruff check .
+uv run ruff format --check .
+```
